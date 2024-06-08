@@ -1,21 +1,50 @@
 #include <SFML/Graphics.hpp>
 #include "game.h"
+#include <iostream>
+#include "error.h"
 
 
 Game::Game()
-    : mWindow(sf::VideoMode(1920, 1080), "SFML Application"), mPlayer()
+    : mWindow(sf::VideoMode(1920, 1080), "SFML Application"), mTexture(), mPlayer(), mFont()
 {
-    mPlayer.setRadius(400.f);
+    std::cout << "App initiallized successfully!\n";
+    mWindow.setVerticalSyncEnabled(true); // VSync enabled
+
+    // IBMPlex font loading
+    if (!mFont.loadFromFile("res/font/IBMPlexMono.ttf"))
+    {
+        ConsoleError::throwError("Could not load the IBMPlexMono font!");
+    }
+
+    // player texture loading
+    if (!mTexture.loadFromFile( "res/img/player.png" )) 
+    {
+        ConsoleError::throwError("Could not load the mPlayer texture!");
+    }
+    mPlayer.setTexture(mTexture);
     mPlayer.setPosition(100.f, 100.f);
-    mPlayer.setFillColor(sf::Color::Cyan);
+    PlayerSpeed = 500.f;
+    mIsMovingUp = false;
+    mIsMovingDown = false;
+    mIsMovingRight = false;
+    mIsMovingLeft = false;
+    
 }
 
 void Game::run()
 {
+    sf::Clock clock;
+    sf::Time timeSinceLastUpdate = sf::Time::Zero;
     while (mWindow.isOpen())
     {
         processEvents();
-        update();
+        timeSinceLastUpdate += clock.restart();
+        while (timeSinceLastUpdate > TimePerFrame)
+        {
+            timeSinceLastUpdate -= TimePerFrame;
+            processEvents();
+            update(TimePerFrame);
+        }
         render();
     }
 }
@@ -53,18 +82,18 @@ void Game::handlePlayerInput(sf::Keyboard::Key key,
         mIsMovingRight = isPressed;
 }
 
-void Game::update()
+void Game::update(sf::Time deltaTime)
 {
     sf::Vector2f movement(0.f, 0.f);
     if (mIsMovingUp)
-        movement.y -= 1.f;
+        movement.y -= PlayerSpeed;
     if (mIsMovingDown)
-        movement.y += 1.f;
+        movement.y += PlayerSpeed;
     if (mIsMovingLeft)
-        movement.x -= 1.f;
+        movement.x -= PlayerSpeed;
     if (mIsMovingRight)
-        movement.x += 1.f;
-    mPlayer.move(movement);
+        movement.x += PlayerSpeed;
+    mPlayer.move(movement * deltaTime.asSeconds());
 }
 
 void Game::render()
