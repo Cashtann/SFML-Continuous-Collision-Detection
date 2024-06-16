@@ -24,15 +24,24 @@
     <ClCompile Include="error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="colorHue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bouncingBall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="devbar.h">
+    <ClInclude Include="error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="error.h">
+    <ClInclude Include="colorHue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bouncingBall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

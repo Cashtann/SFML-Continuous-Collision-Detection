@@ -2,12 +2,13 @@
 #include "game.h"
 #include <iostream>
 #include "error.h"
+#include "bouncingBall.h"
 
 
 Game::Game()
-    : mWindow(sf::VideoMode(1920, 1080), "SFML Application"), mTexture(), mPlayer(), mFont()
+    : mWindow(sf::VideoMode(1920, 1080), "SFML Application"), mTexture(), mPlayer(), mFont(), TimePerFrame(sf::seconds(1.f / 144.0f)), 
+    mHueColor(3600.0f), pMWindow(& mWindow), pMHueColors3i(& mHueColor.colorRGB), mBall1(pMWindow, sf::Vector2f(500.0f, 500.0f), 64.0f, pMHueColors3i)
 {
-    std::cout << "App initiallized successfully!\n";
     mWindow.setVerticalSyncEnabled(true); // VSync enabled
 
     // IBMPlex font loading
@@ -21,13 +22,24 @@ Game::Game()
     {
         ConsoleError::throwError("Could not load the mPlayer texture!");
     }
+    // Player texturing and setting spawn location
     mPlayer.setTexture(mTexture);
     mPlayer.setPosition(100.f, 100.f);
+    mPlayer.setOrigin((float)mTexture.getSize().x / 2, (float)mTexture.getSize().y / 2);
+    
+    // Setting player speed
     PlayerSpeed = 500.f;
+
+    // Setting movement directions booleans
     mIsMovingUp = false;
     mIsMovingDown = false;
     mIsMovingRight = false;
     mIsMovingLeft = false;
+
+    // Setting mouse input booleans to default (false)
+    mIsLMBPressed = false;
+    mIsRMBPressed = false;
+
     
 }
 
@@ -39,6 +51,7 @@ void Game::run()
     {
         processEvents();
         timeSinceLastUpdate += clock.restart();
+        std::cout << (1.0f / timeSinceLastUpdate.asSeconds()) << "\n";
         while (timeSinceLastUpdate > TimePerFrame)
         {
             timeSinceLastUpdate -= TimePerFrame;
@@ -55,22 +68,46 @@ void Game::processEvents()
     while (mWindow.pollEvent(event))
     {
         switch (event.type)
+
         {
+        // Keyboard inputs
         case sf::Event::KeyPressed:
-            handlePlayerInput(event.key.code, true);
+            handlePlayerInputKeyboard(event.key.code, true);
             break;
         case sf::Event::KeyReleased:
-            handlePlayerInput(event.key.code, false);
+            handlePlayerInputKeyboard(event.key.code, false);
             break;
         case sf::Event::Closed:
             mWindow.close();
+            break;
+        case sf::Event::Resized:
+            std::cout << "New window width & height: " << event.size.width << ", " << event.size.height << "\n";
+            break;
+
+        // Mouse inputs
+        case sf::Event::MouseButtonPressed:
+            handlePlayerInputMouse(event.mouseButton.button, true);
+            break;
+        case sf::Event::MouseButtonReleased:
+            handlePlayerInputMouse(event.mouseButton.button, false);
             break;
         }
     }
 }
 
-void Game::handlePlayerInput(sf::Keyboard::Key key,
-    bool isPressed)
+void Game::handlePlayerInputMouse(sf::Mouse::Button button, bool isPressed)
+{
+    if (button == sf::Mouse::Left)
+    {
+        mIsLMBPressed = isPressed;
+    }
+    if (button == sf::Mouse::Right)
+    {
+        mIsRMBPressed = isPressed;
+    }
+}
+
+void Game::handlePlayerInputKeyboard(sf::Keyboard::Key key, bool isPressed)
 {
     if (key == sf::Keyboard::W)
         mIsMovingUp = isPressed;
@@ -84,6 +121,7 @@ void Game::handlePlayerInput(sf::Keyboard::Key key,
 
 void Game::update(sf::Time deltaTime)
 {
+    // Player movement
     sf::Vector2f movement(0.f, 0.f);
     if (mIsMovingUp)
         movement.y -= PlayerSpeed;
@@ -94,11 +132,26 @@ void Game::update(sf::Time deltaTime)
     if (mIsMovingRight)
         movement.x += PlayerSpeed;
     mPlayer.move(movement * deltaTime.asSeconds());
+
+    // Mouse interaction
+    if (mIsLMBPressed)
+    {
+        mousePos = sf::Mouse::getPosition(mWindow);
+        mPlayer.setPosition((float)mousePos.x, (float)mousePos.y);
+    } 
+    if (mIsRMBPressed)
+    {
+        mousePos = sf::Mouse::getPosition(mWindow);
+        mBall1.setPosition((float)mousePos.x, (float)mousePos.y);
+    }
 }
 
 void Game::render()
 {
-    mWindow.clear();
+    mHueColor.rotateHue(.5f);
+    //mWindow.clear(sf::Color(mBgColor.colorRGB.x, mBgColor.colorRGB.y, mBgColor.colorRGB.z));
+    mWindow.clear(sf::Color(30, 0, 30));
+    mBall1.Draw();
     mWindow.draw(mPlayer);
     mWindow.display();
 }
