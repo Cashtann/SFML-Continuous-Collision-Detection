@@ -3,6 +3,7 @@
 #include "colorHue.h"
 #include "bouncingBall.h"
 #include <vector>
+#include "player.h"
 
 class Game
 {
@@ -14,22 +15,23 @@ private:
     void processEvents();
     void update(sf::Time deltaTime);
     void render();
-    void handlePlayerInputMouse(sf::Mouse::Button button, bool isPressed);
-    void handlePlayerInputKeyboard(sf::Keyboard::Key key, bool isPressed);
+    void handleInputMouse(sf::Mouse::Button button, bool isPressed);
+    void handleInputKeyboard(sf::Keyboard::Key key, bool isPressed);
 
 private:
     const sf::Time TimePerFrame;
+    const sf::Time* pTimePerFrame;
 
     sf::RenderWindow mWindow;
-    sf::RenderWindow* pMWindow;
-    sf::Texture mTexture;
-    sf::Sprite mPlayer;
+    sf::RenderWindow* mPWindow;
+    /*sf::Texture mTexture;
+    sf::Sprite mPlayer;*/
     sf::Font mFont;
+
+    Player mPlayer;
 
     sf::Vector2i mousePos;
 
-    float PlayerSpeed;
-    bool mIsMovingUp, mIsMovingDown, mIsMovingRight, mIsMovingLeft;
     bool mIsLMBPressed, mIsRMBPressed;
 
     // Fun
