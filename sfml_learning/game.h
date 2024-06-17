@@ -25,6 +25,10 @@ private:
     sf::RenderWindow mWindow;
     sf::RenderWindow* mPWindow;
 
+    // View
+    sf::View mView;
+    void resizeView(const sf::RenderWindow& window, sf::View& view);
+
     // Player 
     Player mPlayer;
 

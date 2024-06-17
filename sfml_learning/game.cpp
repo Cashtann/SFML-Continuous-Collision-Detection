@@ -4,17 +4,27 @@
 #include "error.h"
 #include "particleSimulation.h"
 
+static const float SCREEN_WIDTH = 1920.0f;
+static const float SCREEN_HEIGHT = 1080.0f;
+
+void Game::resizeView(const sf::RenderWindow& window, sf::View& view)
+{
+    float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
+    view.setSize(SCREEN_HEIGHT * aspectRatio, SCREEN_HEIGHT);
+}
+
 
 Game::Game()
-    : mWindow(sf::VideoMode(1920, 1080), "SFML Application"), 
+    : mWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML Application"), 
         mPWindow(& mWindow), 
-        mPlayer(mPWindow, "res/img/player.png", sf::Vector2f(100.0f, 100.0f)), 
+        mView(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT)),
+        mPlayer(mPWindow, "res/img/player.png", sf::Vector2f(500.0f, 500.0f)), 
         TimePerFrame(sf::seconds(1.f / 144.0f)), 
         pTimePerFrame(&TimePerFrame),
         mHueColor(90.0f), 
         pMHueColors3i(& mHueColor.colorRGB), 
-        mSimulation(mPWindow, 10, 32.0f, pMHueColors3i,
-            sf::Vector2f(100.0f, 1000.0f), sf::Vector2f(100.0f, 600.0f))
+        mSimulation(mPWindow, 1, 24.0f, pMHueColors3i,
+            sf::Vector2f(0.0f, 800.0f), sf::Vector2f(0.0f, 800.0f))
 {
     mWindow.setVerticalSyncEnabled(true); // VSync enabled
 
@@ -36,6 +46,7 @@ void Game::run()
         {
             timeSinceLastUpdate -= TimePerFrame;
             processEvents();
+            if (!mIsLMBPressed)
             update(pTimePerFrame);
         }
         render();
@@ -60,7 +71,7 @@ void Game::processEvents()
             mWindow.close();
             break;
         case sf::Event::Resized:
-            std::cout << "New window width & height: " << event.size.width << ", " << event.size.height << "\n";
+            resizeView(mWindow, mView);
             break;
 
         // Mouse inputs
@@ -103,18 +114,27 @@ void Game::update(const sf::Time* deltaTime)
     {
         mousePos = sf::Mouse::getPosition(mWindow);
     }
+    // RGB Hue rotation update
+    mHueColor.rotateHue(.5f);
     // Player logic update
     mPlayer.update(deltaTime);
+    // Simulation update
     mSimulation.update(deltaTime);
     
 }
 
 void Game::render()
 {
-    mHueColor.rotateHue(.5f);
     //mWindow.clear(sf::Color(mBgColor.colorRGB.x, mBgColor.colorRGB.y, mBgColor.colorRGB.z));
+    
+    mWindow.setView(mView);
+    mView.setCenter(mPlayer.getPosition());
+
     mWindow.clear(sf::Color(30, 0, 30));
+
+
     mSimulation.draw();
     mPlayer.draw();
+
     mWindow.display();
 }

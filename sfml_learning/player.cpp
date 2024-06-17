@@ -15,7 +15,7 @@ Player::Player(sf::RenderWindow* pWindow, const char* txtPath, sf::Vector2f pos)
 	}
 	playerSprite.setTexture(mTexture);
 	playerSprite.setPosition(mPos);
-	playerSprite.setOrigin(mTexture.getSize().x, mTexture.getSize().y);
+	playerSprite.setOrigin(mTexture.getSize().x / 2, mTexture.getSize().y / 2);
 
 	// Setting movement directions booleans
 	mIsMovingUp = false;
@@ -29,6 +29,12 @@ Player::Player(sf::RenderWindow* pWindow, const char* txtPath, sf::Vector2f pos)
 
 	// Player speed
 	playerSpeed = 500.0f;
+}
+
+
+sf::Vector2f Player::getPosition() const
+{
+	return playerSprite.getPosition();
 }
 
 void Player::inputHandleKeyboard(sf::Keyboard::Key key, bool isPressed)
@@ -57,11 +63,15 @@ void Player::inputHandleMouse(sf::Mouse::Button button, bool isPressed)
 
 void Player::inputManager()
 {
-	if (mIsLMBPressed)
-	{
-	sf::Vector2i mousePos = sf::Mouse::getPosition(*mPWindow);
-		playerSprite.setPosition((float)mousePos.x, (float)mousePos.y);
-	}
+	//if (mIsLMBPressed)
+	//{
+	//sf::Vector2i mousePos = sf::Mouse::getPosition(*mPWindow);
+	////playerSprite.setPosition((float)mousePos.x, (float)mousePos.y);
+	//sf::Vector2u screenSize = mPWindow->getSize();
+	//int posX = mousePos.x <= screenSize.x / 2 ? (-(int)screenSize.x / 2 - mousePos.x) : ((int)screenSize.x / 2 - mousePos.x);
+	//int posY = mousePos.y <= screenSize.y / 2 ? (-(int)screenSize.y / 2 - mousePos.y) : ((int)screenSize.y / 2 - mousePos.y);
+	//playerSprite.move((float)posX, (float)posY);
+	//}
 }
 
 void Player::move(const sf::Time* deltaTime)

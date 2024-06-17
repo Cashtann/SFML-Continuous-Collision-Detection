@@ -17,6 +17,7 @@ private:
 public:
 	float playerSpeed;
 
+	sf::Vector2f getPosition() const;
 
 	void inputHandleKeyboard(sf::Keyboard::Key key, bool isPressed);
 	void inputHandleMouse(sf::Mouse::Button button, bool isPressed);

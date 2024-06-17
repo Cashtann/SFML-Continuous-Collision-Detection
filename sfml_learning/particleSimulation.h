@@ -13,7 +13,7 @@ public:
 	// Dynamics
 	sf::Vector2f velocity;
 	sf::Vector2f acceleration;
-	float collisionDump;
+	float borderCollisionDump;
 
 	// Visuals
 	sf::Vector3i* color;
@@ -29,15 +29,17 @@ public:
 		sf::Vector2f& horizontalBound, sf::Vector2f& verticalBound);
 	
 	void setPosition(float posX, float posY);
-	sf::Vector2f getPosition();
+	sf::Vector2f getPosition() const;
 
-	sf::CircleShape getSprite();
+	sf::CircleShape getSprite() const;
 
 	void colorUpdate();
 
 	void move(const sf::Time* deltaTime);
 
-	void handleBoxCollision();
+	void continousCollisionDetection(const sf::Time* deltaTime, sf::Vector2f& boundPos);
+
+	void handleBoxCollision(const sf::Time* deltaTime);
 
 	void update(const sf::Time* deltaTime);
 
@@ -48,6 +50,8 @@ class Simulation
 {
 private:
 	std::vector<Ball> ballList;
+	sf::RectangleShape mBarrier;
+	sf::RenderWindow* mPWindow;
 public:
 	Simulation(sf::RenderWindow* pWin, 
 		int count, float radius, sf::Vector3i* color, 
