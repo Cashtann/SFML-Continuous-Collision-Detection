@@ -27,7 +27,7 @@
     <ClCompile Include="colorHue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bouncingBall.cpp">
+    <ClCompile Include="particleSimulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
@@ -44,11 +44,14 @@
     <ClInclude Include="colorHue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bouncingBall.h">
+    <ClInclude Include="particleSimulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODO.txt" />
   </ItemGroup>
 </Project>

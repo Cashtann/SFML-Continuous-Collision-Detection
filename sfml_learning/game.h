@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "colorHue.h"
-#include "bouncingBall.h"
+#include "particleSimulation.h"
 #include <vector>
 #include "player.h"
 
@@ -13,7 +13,7 @@ public:
 
 private:
     void processEvents();
-    void update(sf::Time deltaTime);
+    void update(const sf::Time* deltaTime);
     void render();
     void handleInputMouse(sf::Mouse::Button button, bool isPressed);
     void handleInputKeyboard(sf::Keyboard::Key key, bool isPressed);
@@ -24,19 +24,18 @@ private:
 
     sf::RenderWindow mWindow;
     sf::RenderWindow* mPWindow;
-    /*sf::Texture mTexture;
-    sf::Sprite mPlayer;*/
-    sf::Font mFont;
 
+    // Player 
     Player mPlayer;
 
-    sf::Vector2i mousePos;
 
+
+    // Mouse input stuff
+    sf::Vector2i mousePos;
     bool mIsLMBPressed, mIsRMBPressed;
 
-    // Fun
+    // Fun (colors and balls)
     CustomHueRotation::ColorHueRotation mHueColor;
-    sf::Vector3i mHueColors3i;
     sf::Vector3i* pMHueColors3i;
-    Ball mBall1;
+    Simulation mSimulation;
 };

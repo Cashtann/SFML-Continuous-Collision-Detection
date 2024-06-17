@@ -26,4 +26,6 @@ public:
 
 	void update(const sf::Time* deltaTime);
 
+	void draw();
+
 };

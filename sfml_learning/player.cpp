@@ -85,5 +85,9 @@ void Player::update(const sf::Time* deltaTime)
 {
 	move(deltaTime);
 	inputManager();
+}
+
+void Player::draw()
+{
 	mPWindow->draw(playerSprite);
 }

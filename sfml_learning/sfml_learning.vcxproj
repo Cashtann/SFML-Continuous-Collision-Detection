@@ -133,7 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bouncingBall.cpp" />
+    <ClCompile Include="particleSimulation.cpp" />
     <ClCompile Include="colorHue.cpp" />
     <ClCompile Include="error.cpp" />
     <ClCompile Include="game.cpp" />
@@ -141,11 +141,14 @@
     <ClCompile Include="player.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bouncingBall.h" />
+    <ClInclude Include="particleSimulation.h" />
     <ClInclude Include="colorHue.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="player.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODO.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
