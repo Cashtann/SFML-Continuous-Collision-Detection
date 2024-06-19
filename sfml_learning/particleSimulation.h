@@ -7,6 +7,7 @@ public:
 	// Some essentials
 	sf::RenderWindow* pWindow;
 	
+	
 
 	sf::CircleShape ballSprite;
 
@@ -14,6 +15,8 @@ public:
 	sf::Vector2f velocity;
 	sf::Vector2f acceleration;
 	float borderCollisionDump;
+
+	bool afterEffect;
 
 	// Visuals
 	sf::Vector3i* color;

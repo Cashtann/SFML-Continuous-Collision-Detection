@@ -23,8 +23,8 @@ Game::Game()
         pTimePerFrame(&TimePerFrame),
         mHueColor(90.0f), 
         pMHueColors3i(& mHueColor.colorRGB), 
-        mSimulation(mPWindow, 1, 24.0f, pMHueColors3i,
-            sf::Vector2f(0.0f, 800.0f), sf::Vector2f(0.0f, 800.0f))
+        mSimulation(mPWindow, 225, 24.0f, pMHueColors3i,
+            sf::Vector2f(0.0f, 1200.0f), sf::Vector2f(0.0f, 1200.0f))
 {
     mWindow.setVerticalSyncEnabled(true); // VSync enabled
 

@@ -17,9 +17,11 @@ Ball::Ball(sf::RenderWindow* pWin,
 	pWindow = pWin;
 
 	// Dynamics
-	acceleration = sf::Vector2f(0.0f, 0.0f);
-	borderCollisionDump = 0.7f;
-	velocity = sf::Vector2f(0.0f, -200.0f);
+	acceleration = sf::Vector2f(0.0f, 1000.0f);
+	borderCollisionDump = 1.0f;
+	velocity = sf::Vector2f(1000.0f, 1000.0f);
+
+	afterEffect = false;
 
 	// Visuals
 	position = _position;
@@ -65,7 +67,7 @@ void Ball::move(const sf::Time* deltaTime)
 
 	velocity += acceleration * (*deltaTime).asSeconds();
 	ballSprite.move(velocity * (*deltaTime).asSeconds());
-	handleBoxCollision(deltaTime);
+	continousCollisionDetection(deltaTime, vBound);
 	
 }
 
@@ -105,25 +107,101 @@ void Ball::handleBoxCollision(const sf::Time* deltaTime)
 void Ball::continousCollisionDetection(const sf::Time* deltaTime, sf::Vector2f& boundPos)
 {
 	float collideTime;
-	/// Vertical Collision Detection
 
+	/// Vertical Collision Detection
 	if (position.y + (velocity.y * (*deltaTime).asSeconds() - radius) <= boundPos.x) // Upper barrier
 	{
 		collideTime = (position.y - boundPos.x - radius)
-			/ (position.y - velocity.y * (*deltaTime).asSeconds());
-		std::cout << collideTime << " up\n";
-		while (true){}
+			/ (-velocity.y * (*deltaTime).asSeconds());
+		//std::cout << collideTime << " up\n";
+
+		if (collideTime != 0.0f) 
+		{
+		float diffY = velocity.y * (*deltaTime).asSeconds() * (collideTime - 1.0f);
+		ballSprite.move({ 0.0f, diffY });
+		velocity /= borderCollisionDump;
+		velocity.y *= -1;
+		if (collideTime == 0.0f && afterEffect)
+		{
+			std::mt19937 mt(time(0));
+			int dirX = mt() % 2 == 0 ? -1 : 1;
+			int dirY = mt() % 2 == 0 ? -1 : 1;
+			acceleration = {(float)(dirX * mt() % 1000), (float)(dirY * mt() % 1000) };
+		}
+
+		}
 		
 	}
-	if (position.y + (velocity.y * (*deltaTime).asSeconds() + radius) >= boundPos.y) // Lower barrier
+	else if (position.y + (velocity.y * (*deltaTime).asSeconds() + radius) >= boundPos.y) // Lower barrier
 	{
 		collideTime = (boundPos.y - radius - position.y)
-			/ (velocity.y * (*deltaTime).asSeconds() - position.y);
-		std::cout << collideTime << " down\n";
-		while (true) {}
-	}
-	
+			/ (velocity.y * (*deltaTime).asSeconds());
+		//std::cout << collideTime << " down\n";
+		if (collideTime != 0.0f)
+		{
+		float diffY = velocity.y * (*deltaTime).asSeconds() * (collideTime - 1.0f);
+		ballSprite.move({0.0f, diffY});
+		velocity *= borderCollisionDump;
+		velocity.y *= -1;
+		if (collideTime == 0.0f && afterEffect)
+		{
+			std::mt19937 mt(time(0));
+			int dirX = mt() % 2 == 0 ? -1 : 1;
+			int dirY = mt() % 2 == 0 ? -1 : 1;
+			acceleration = { (float)(dirX * mt() % 1000), (float)(dirY * mt() % 1000) };
+		}
 
+		}
+		
+	}
+
+	/// Horizontal Collision Detection
+	if (position.x + (velocity.x * (*deltaTime).asSeconds() - radius) <= boundPos.x) // Left barrier
+	{
+		collideTime = (position.x - boundPos.x - radius)
+			/ (-velocity.x * (*deltaTime).asSeconds());
+		//std::cout << collideTime << " left\n";
+
+		if (collideTime != 0.0f)
+		{
+		float diffX = velocity.x * (*deltaTime).asSeconds() * (collideTime - 1.0f);
+		ballSprite.move({ diffX, 0.0f });
+		velocity *= borderCollisionDump;
+		velocity.x *= -1;
+		if (collideTime == 0.0f && afterEffect)
+		{
+			std::mt19937 mt(time(0));
+			int dirX = mt() % 2 == 0 ? -1 : 1;
+			int dirY = mt() % 2 == 0 ? -1 : 1;
+			acceleration = { (float)(dirX * mt() % 1000), (float)(dirY * mt() % 1000) };
+		}
+
+		}
+
+	}
+	else if (position.x + (velocity.x * (*deltaTime).asSeconds() + radius) >= boundPos.y) // Right barrier
+	{
+		collideTime = (boundPos.y - radius - position.x)
+			/ (velocity.x * (*deltaTime).asSeconds());
+		//std::cout << collideTime << " right\n";
+
+		if (collideTime != 0.0f)
+		{
+		float diffX = velocity.x * (*deltaTime).asSeconds() * (collideTime - 1.0f);
+		ballSprite.move({ diffX, 0.0f });
+		velocity *= borderCollisionDump;
+		velocity.x *= -1;
+		if (collideTime == 0.0f && afterEffect)
+		{
+			std::mt19937 mt(time(0));
+			int dirX = mt() % 2 == 0 ? -1 : 1;
+			int dirY = mt() % 2 == 0 ? -1 : 1;
+			acceleration = { (float)(dirX * mt() % 1000), (float)(dirY * mt() % 1000) };
+
+		}
+
+		}
+	}
 }
 
 // Updating
