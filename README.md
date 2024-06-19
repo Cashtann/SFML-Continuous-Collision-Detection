@@ -1,9 +1,7 @@
-# This project is my attempt to learn **SFML**.
+# SFML Collision System (Particle - Barrier) using Contiunous Collision Detection.
 
-Because SFML is Windows specific (as far as I know and use it), I use Visual Studio 2022 to compile/build and run.
+This is my attempt to create collision system. For now (and the rest of its existence) I'm using **Continuous Collision Detection**.
+I code it entirely myself as a challange, inspired by [this video] (https://www.youtube.com/watch?v=eED4bSkYCB8). 
 
-This project is my first "interaction" with SFML, nothing crazy, just some basics.
-
-In here, I put my C++ "skills" to a test.
-
-I'm tinkering with random, sometime weird, ideas.
+I know this program **is not well optimized**, and it really wasn't supposed to be. I build this on top of my first project (contact) with SFML as one of many different ideas to implement. 
+There is a bunch of unused or unnecessary code. 
