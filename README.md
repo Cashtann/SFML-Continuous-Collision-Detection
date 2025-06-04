@@ -4,6 +4,8 @@
 
 Windows
 
+# Info
+
 This is my attempt to create collision system. For now (and the rest of its existence) I'm using **Continuous Collision Detection**.
 I code it entirely myself as a challange, inspired by [this video](https://www.youtube.com/watch?v=eED4bSkYCB8). 
 
